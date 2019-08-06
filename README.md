@@ -1,6 +1,8 @@
 # ParseJS
 
 **ParseJS** is a JavaScript parser for Dart. It is well-tested and is reasonably efficient.
+Original project : https://github.com/asgerf/parsejs.dart
+This project is intended to migrate it to dart 2.4 or above
 
 ## Example Usage
 ```dart
@@ -23,3 +25,9 @@ The `parsejs` function takes the following optional arguments:
 - `handleNoise`: If true, parser will try to ignore hash bangs and HTML comment tags surrounding the source code. Default is true.
 - `annotate`: If true, parser will initialize `Node.parent`, `Scope.environment`, and `Name.scope`, to simplify subsequent AST analysis. Default is true.
 - `parseAsExpression`: If true, the input will be parsed as an expression statement.
+
+
+## To run test cases 
+1. Open terminal and cd to parsejs.dart/test/util directory
+2. Do `npm install` 
+3. CD to parsejs.dart/test/ director and run `./runtest`

@@ -1,3 +1,6 @@
+## 2.0.0 (2019-08-06)
+- Updated for Dart 2.4
+
 ## 1.2.0 (2017-05-06)
 
 - Added an option to parse the input as an expression.

@@ -4,7 +4,7 @@ import 'package:parsejs/parsejs.dart';
 import 'ast_json.dart';
 
 import 'dart:io';
-import 'dart:convert' show JSON;
+import 'dart:convert' as JSON;
 
 class Args {
   List<String> args = <String>[];
@@ -48,7 +48,7 @@ void main(List<String> cmdargs) {
       if (cmd['json']) {
         var json =
             new Ast2Json(ranges: cmd['range'], lines: cmd['line']).visit(ast);
-        print(JSON.encode(json));
+        print(JSON.jsonEncode(json));
       }
     } on ParseError catch (e) {
       stderr.writeln(e);

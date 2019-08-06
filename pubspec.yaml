@@ -1,7 +1,11 @@
 name: parsejs
-version: 1.2.0
-author: Asger Feldthaus <asger.feldthaus@gmail.com>
-description: JavaScript parser.
-homepage: https://github.com/asgerf/parsejs.dart
+version: 2.0.0
+author: Anurag Vohra <Anurag Vohra>
+description: JavaScript parser written by Asger Feldthaus<asger.feldthaus@gmail.com>, updated to dart 2 by Anurag Vohra <anuragvohraec@gmail.com>
+homepage: https://github.com/anuragvohraec/parsejs.dart.git
+
+environment:
+  sdk: '>=2.4.0 < 3.0.0'
+
 dependencies:
   unicode: '>=0.0.8 <1.0.0'
