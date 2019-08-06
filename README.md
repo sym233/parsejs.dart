@@ -6,13 +6,13 @@ This project is intended to migrate it to dart 2.4 or above
 
 ## Example Usage
 ```dart
-import 'package:parsejs/parsejs.dart';
+import 'package:jsparser/jsparser.dart';
 
 void main() {
     new File('test.js').readAsString().then((String code) {
-        Program ast = parsejs(code, filename: 'test.js')
+        Program ast = parsejs(code, filename: 'test.js');
         // Use the AST for something
-    })
+    });
 }
 ```
 
