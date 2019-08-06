@@ -7,6 +7,7 @@ This project is intended to migrate it to dart 2.4 or above
 ## Example Usage
 ```dart
 import 'package:jsparser/jsparser.dart';
+import 'dart:io';
 
 void main() {
     new File('test.js').readAsString().then((String code) {

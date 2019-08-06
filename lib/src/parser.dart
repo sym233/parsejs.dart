@@ -19,10 +19,10 @@ class Parser {
   dynamic fail({Token tok, String expected, String message}) {
     if (tok == null) tok = token;
     if (message == null) {
-      if (expected != null)
+      if (expected != null) {
         message = "Expected $expected but found $tok";
-      else
-        message = "Unexpected token $tok";
+      }else{
+        message = "Unexpected token $tok";}
     }
     throw new ParseError(
         message, filename, tok.line, tok.startOffset, tok.endOffset);
@@ -97,7 +97,7 @@ class Parser {
     consume(Token.LPAREN);
     List<Name> list = <Name>[];
     while (token.type != Token.RPAREN) {
-      if (list.length > 0) {
+      if (list.isNotEmpty) {
         consume(Token.COMMA);
       }
       list.add(parseName());
@@ -114,7 +114,7 @@ class Parser {
     int start = token.startOffset;
     assert(token.text == 'function');
     Token funToken = next();
-    Name name = null;
+    Name name;
     if (token.type == Token.NAME) {
       name = parseName();
     }
@@ -299,7 +299,7 @@ class Parser {
     Token open = requireNext(Token.LBRACE);
     List<Property> properties = <Property>[];
     while (token.type != Token.RBRACE) {
-      if (properties.length > 0) {
+      if (properties.isNotEmpty) {
         consume(Token.COMMA);
       }
       if (token.type == Token.RBRACE) break; // may end with extra comma

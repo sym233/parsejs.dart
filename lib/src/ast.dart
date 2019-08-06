@@ -603,8 +603,8 @@ class Property extends Node {
   String kind;
 
   Property(this.key, this.value, [this.kind = 'init']);
-  Property.getter(this.key, FunctionExpression this.value) : kind = 'get';
-  Property.setter(this.key, FunctionExpression this.value) : kind = 'set';
+//  Property.getter(this.key, FunctionExpression this.value) : kind = 'get';
+//  Property.setter(this.key, FunctionExpression this.value) : kind = 'set';
 
   bool get isInit => kind == 'init';
   bool get isGetter => kind == 'get';
@@ -764,7 +764,7 @@ class CallExpression extends Expression {
   Expression callee;
   List<Expression> arguments;
 
-  CallExpression(this.callee, this.arguments, {this.isNew: false});
+  CallExpression(this.callee, this.arguments, {this.isNew= false});
   CallExpression.newCall(this.callee, this.arguments) : isNew = true;
 
   forEach(callback) {

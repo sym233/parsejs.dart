@@ -1,5 +1,5 @@
 name: jsparser
-version: 2.0.0
+version: 2.0.1
 author: Anurag Vohra <Anurag Vohra>
 description: JavaScript parser originally written by Asger Feldthaus<asger.feldthaus@gmail.com>, upgarded to dart 2.4 by Anurag Vohra <anuragvohraec@gmail.com>
 homepage: https://github.com/anuragvohraec/parsejs.dart.git
