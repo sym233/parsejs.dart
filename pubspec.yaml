@@ -1,7 +1,7 @@
-name: parsejs
+name: jsparser
 version: 2.0.0
 author: Anurag Vohra <Anurag Vohra>
-description: JavaScript parser written by Asger Feldthaus<asger.feldthaus@gmail.com>, updated to dart 2 by Anurag Vohra <anuragvohraec@gmail.com>
+description: JavaScript parser originally written by Asger Feldthaus<asger.feldthaus@gmail.com>, upgarded to dart 2.4 by Anurag Vohra <anuragvohraec@gmail.com>
 homepage: https://github.com/anuragvohraec/parsejs.dart.git
 
 environment:

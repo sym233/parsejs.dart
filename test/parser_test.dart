@@ -1,6 +1,6 @@
 // Parses the given FILE and prints it as JSON so it can be compared against Esprima's output.
 
-import 'package:parsejs/parsejs.dart';
+import 'package:jsparser/jsparser.dart';
 import 'ast_json.dart';
 
 import 'dart:io';

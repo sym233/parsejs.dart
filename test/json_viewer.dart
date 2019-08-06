@@ -1,6 +1,6 @@
 import 'ast_json.dart';
 import 'dart:io';
-import 'package:parsejs/parsejs.dart';
+import 'package:jsparser/jsparser.dart';
 
 Program parseInput(String text) {
   try {

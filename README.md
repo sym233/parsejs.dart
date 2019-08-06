@@ -1,6 +1,6 @@
-# ParseJS
+# JSParser
 
-**ParseJS** is a JavaScript parser for Dart. It is well-tested and is reasonably efficient.
+**JSParser** is an updgraded version, for Dart 2.4 and above, of **ParseJS**. **ParseJS** is a JavaScript parser for Dart. It is well-tested and is reasonably efficient.
 Original project : https://github.com/asgerf/parsejs.dart
 This project is intended to migrate it to dart 2.4 or above
 
@@ -18,7 +18,7 @@ void main() {
 
 ## Options
 
-The `parsejs` function takes the following optional arguments:
+The `jsparser` function takes the following optional arguments:
 
 - `filename`: An arbitrary string indicating where the source came from. For your convenience this will be available on `Node.filename` and on `ParseError.filename`.
 - `firstLine`: The line number to associate with the first line of code. Default is 1. Useful if code was extracted from an HTML file, and you prefer absolute line numbers.
