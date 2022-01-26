@@ -13,9 +13,9 @@ class Ast2Json extends Visitor<Object> {
   // NOTE: The order in which properties are mentioned is significant, since properties
   //       must be mentioned in the same order for our JSON comparator to work.
 
-  List<Object> list(List<Node> nodes) => nodes.map(visit).toList();
+  List<Object?> list(List<Node?> nodes) => nodes.map(visit).toList();
 
-  visit(Node node) {
+  visit(Node? node) {
     if (node == null) return null;
     Map json = node.visitBy(this) as Map;
     if (ranges) {
@@ -244,10 +244,10 @@ class Ast2Json extends Visitor<Object> {
   visitNameExpression(NameExpression node) => visit(node.name);
 
   // Some values cannot be encoded in JSON. We simply represent these as null.
-  bool isUnencodable(Object x) =>
+  bool isUnencodable(x) =>
       x == double.infinity || x == double.negativeInfinity || x == double.nan;
 
-  visitLiteral(LiteralExpression node) => <String, Object>{
+  visitLiteral(LiteralExpression node) => <String, Object?>{
         'type': 'Literal',
         'value': isUnencodable(node.value) ? null : node.value,
         'raw': node.raw

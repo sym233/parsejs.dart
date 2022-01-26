@@ -23,11 +23,11 @@ export 'src/lexer.dart' show ParseError;
 ///
 /// - [parseAsExpression]: if true, parse the input as an expression statement.
 Program parsejs(String text,
-    {String filename,
-      int firstLine= 1,
-      bool handleNoise= true,
-      bool annotations= true,
-      bool parseAsExpression= false}) {
+    {String? filename,
+    int firstLine = 1,
+    bool handleNoise = true,
+    bool annotations = true,
+    bool parseAsExpression = false}) {
   Offsets offset = new Offsets(0, text.length, firstLine);
   if (handleNoise) {
     offset = trimNoise(text, offset);

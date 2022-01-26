@@ -5,7 +5,7 @@ import 'package:unicode/unicode.dart' as unicode;
 
 class ParseError {
   String message;
-  String filename;
+  String? filename;
   int line; // 1-based line number.
   int startOffset;
   int endOffset;
@@ -22,10 +22,10 @@ class Token {
   int startOffset;
   int line;
   int type;
-  String
+  String?
       text; // text exactly as in source code or null for EOF or tokens with type > 31
   bool afterLinebreak; // true if first token after a linebreak
-  String
+  String?
       value; // value of identifier or string literal after escapes, null for other tokens
 
   /// For tokens that can be used as binary operators, this indicates their relative precedence.
@@ -35,11 +35,11 @@ class Token {
 
   Token(this.startOffset, this.line, this.type, this.afterLinebreak, this.text);
 
-  String toString() => text != null ? text : typeToString(type);
+  String toString() => text != null ? text! : typeToString(type);
 
   String get detailedString => "[$startOffset, $text, $type, $afterLinebreak]";
 
-  int get endOffset => startOffset + (text == null ? 1 : text.length);
+  int get endOffset => startOffset + (text == null ? 1 : text!.length);
 
   static const int EOF = 0;
   static const int NAME = 1;
@@ -173,21 +173,18 @@ bool isEOL(int x) {
 
 class Lexer {
   Lexer(String text,
-      {this.filename, this.currentLine: 1, this.index: 0, this.endOfFile}) {
-    input = text.codeUnits;
-    if (endOfFile == null) {
-      endOfFile = input.length;
-    }
-  }
+      {this.filename, this.currentLine: 1, this.index: 0, int? endOfFile})
+      : input = text.codeUnits,
+        this.endOfFile = endOfFile ?? text.codeUnits.length;
 
   List<int> input;
   int index = 0;
-  int endOfFile;
-  int tokenStart;
-  int tokenLine;
+  late int endOfFile;
+  late int tokenStart;
+  late int tokenLine;
   int currentLine; // We use 1-based line numbers.
-  bool seenLinebreak;
-  String filename;
+  late bool seenLinebreak;
+  String? filename;
 
   int get current => index == endOfFile ? char.NULL : input[index];
 
@@ -196,11 +193,11 @@ class Lexer {
     return index == endOfFile ? char.NULL : input[index];
   }
 
-  void fail(String message) {
+  Never fail(String message) {
     throw new ParseError(message, filename, currentLine, tokenStart, index);
   }
 
-  Token emitToken(int type, [String value]) {
+  Token emitToken(int type, [String? value]) {
     return new Token(tokenStart, tokenLine, type, seenLinebreak, value);
   }
 
@@ -371,7 +368,6 @@ class Lexer {
                   break;
                 case char.NULL:
                   fail("Unterminated block comment");
-                  break;
                 case char.CR:
                   ++currentLine;
                   x = next();
@@ -610,7 +606,6 @@ class Lexer {
       switch (x) {
         case char.NULL:
           fail("Unterminated regexp");
-          break;
         case char.LBRACKET:
           inCharClass = true;
           break;

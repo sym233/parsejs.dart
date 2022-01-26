@@ -1,8 +1,8 @@
 # JSParser
 
-**JSParser** is an updgraded version, for Dart 2.4 and above, of **ParseJS**. **ParseJS** is a JavaScript parser for Dart. It is well-tested and is reasonably efficient.
+**JSParser** is an updgraded version, for Dart 2.15.0 and above, migrated to null-safety, of **ParseJS**. **ParseJS** is a JavaScript parser for Dart. It is well-tested and is reasonably efficient.
 Original project : https://github.com/asgerf/parsejs.dart
-This project is intended to migrate it to dart 2.4 or above
+This project is intended to migrate it to dart 2.15.0 or above
 
 ## Example Usage
 ```dart

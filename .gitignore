@@ -7,3 +7,5 @@ test/output
 .packages
 .idea/*
 /test/util/package-lock.json
+.dart_tool/
+.vscode/

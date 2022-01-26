@@ -1,11 +1,10 @@
 name: jsparser
-version: 2.0.1
-author: Anurag Vohra <Anurag Vohra>
-description: JavaScript parser originally written by Asger Feldthaus<asger.feldthaus@gmail.com>, upgarded to dart 2.4 by Anurag Vohra <anuragvohraec@gmail.com>
-homepage: https://github.com/anuragvohraec/parsejs.dart.git
+version: 2.1.0
+description: JavaScript parser originally written by Asger Feldthaus<asger.feldthaus@gmail.com>, upgarded to dart 2.4 by Anurag Vohra <anuragvohraec@gmail.com>, migrated to null-safety by sym233 <sym_xd@qq.com>
+homepage: https://github.com/sym233/parsejs.dart.git
 
 environment:
-  sdk: '>=2.4.0 < 3.0.0'
+  sdk: ^2.15.0
 
 dependencies:
-  unicode: '>=0.0.8 <1.0.0'
+  unicode: ^0.3.1

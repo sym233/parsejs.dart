@@ -1,3 +1,6 @@
+## 2.1.0 (2022-01-26)
+- Migrated to null-safety
+
 ## 2.0.1 (2019-08-06)
 - Amended Pub analysis suggestions
 ## 2.0.0 (2019-08-06)
