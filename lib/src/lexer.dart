@@ -15,6 +15,7 @@ class ParseError {
 
   String get location => filename == null ? 'Line $line' : '$filename:$line';
 
+  @override
   String toString() => '[$location] $message';
 }
 
@@ -35,6 +36,7 @@ class Token {
 
   Token(this.startOffset, this.line, this.type, this.afterLinebreak, this.text);
 
+  @override
   String toString() => text != null ? text! : typeToString(type);
 
   String get detailedString => "[$startOffset, $text, $type, $afterLinebreak]";
@@ -68,7 +70,7 @@ class Token {
   static const int QUESTION = char.QUESTION;
 
   static String typeToString(int type) {
-    if (type > 31) return "'${new String.fromCharCode(type)}'";
+    if (type > 31) return "'${String.fromCharCode(type)}'";
     switch (type) {
       case EOF:
         return 'EOF';
@@ -173,9 +175,9 @@ bool isEOL(int x) {
 
 class Lexer {
   Lexer(String text,
-      {this.filename, this.currentLine: 1, this.index: 0, int? endOfFile})
+      {this.filename, this.currentLine = 1, this.index = 0, int? endOfFile})
       : input = text.codeUnits,
-        this.endOfFile = endOfFile ?? text.codeUnits.length;
+        endOfFile = endOfFile ?? text.codeUnits.length;
 
   List<int> input;
   int index = 0;
@@ -194,16 +196,16 @@ class Lexer {
   }
 
   Never fail(String message) {
-    throw new ParseError(message, filename, currentLine, tokenStart, index);
+    throw ParseError(message, filename, currentLine, tokenStart, index);
   }
 
   Token emitToken(int type, [String? value]) {
-    return new Token(tokenStart, tokenLine, type, seenLinebreak, value);
+    return Token(tokenStart, tokenLine, type, seenLinebreak, value);
   }
 
   Token emitValueToken(int type) {
-    String value = new String.fromCharCodes(input.getRange(tokenStart, index));
-    return new Token(tokenStart, tokenLine, type, seenLinebreak, value);
+    String value = String.fromCharCodes(input.getRange(tokenStart, index));
+    return Token(tokenStart, tokenLine, type, seenLinebreak, value);
   }
 
   Token scanNumber(int x) {
@@ -267,7 +269,7 @@ class Lexer {
 
   Token scanComplexName(int x) {
     // name with unicode escape sequences
-    List<int> buffer = new List<int>.from(input.getRange(tokenStart, index));
+    List<int> buffer = List<int>.from(input.getRange(tokenStart, index));
     while (true) {
       if (x == char.BACKSLASH) {
         x = next();
@@ -285,7 +287,7 @@ class Lexer {
       }
     }
     Token tok = emitValueToken(Token.NAME);
-    tok.value = new String.fromCharCodes(buffer);
+    tok.value = String.fromCharCodes(buffer);
     return tok..binaryPrecedence = Precedence.RELATIONAL;
   }
 
@@ -590,7 +592,7 @@ class Lexer {
             continue;
           }
           fail(
-              "Unrecognized character: '${new String.fromCharCode(x)}' (UTF+${x.toRadixString(16)})");
+              "Unrecognized character: '${String.fromCharCode(x)}' (UTF+${x.toRadixString(16)})");
       }
     }
   }
@@ -630,7 +632,7 @@ class Lexer {
       x = next();
     }
     return emitToken(Token.REGEXP,
-        new String.fromCharCodes(input.getRange(slash.startOffset, index)));
+        String.fromCharCodes(input.getRange(slash.startOffset, index)));
   }
 
   Token scanStringLiteral(int x) {
@@ -730,7 +732,7 @@ class Lexer {
       }
     }
     ++index; // skip ending quote
-    String value = new String.fromCharCodes(buffer);
+    String value = String.fromCharCodes(buffer);
     return emitValueToken(Token.STRING)..value = value;
   }
 }

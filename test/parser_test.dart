@@ -4,17 +4,17 @@ import 'package:jsparser/jsparser.dart';
 import 'ast_json.dart';
 
 import 'dart:io';
-import 'dart:convert' as JSON;
+import 'dart:convert' as convert;
 
 class Args {
-  List<String> args = <String>[];
-  Set<String> flags = new Set<String>();
+  List<String> args = [];
+  Set<String> flags = {};
 
   bool operator [](String flag) => flags.contains(flag);
 }
 
 Args parseArgs(List<String> args) {
-  Args result = new Args();
+  Args result = Args();
   for (String arg in args) {
     if (arg.startsWith('--')) {
       result.flags.add(arg.substring(2));
@@ -34,10 +34,10 @@ void main(List<String> cmdargs) {
     exit(1);
   }
 
-  File file = new File(cmd.args[0]);
+  File file = File(cmd.args[0]);
   file.readAsString().then((String text) {
     try {
-      Stopwatch watch = new Stopwatch()..start();
+      Stopwatch watch = Stopwatch()..start();
       Program ast = parsejs(text, filename: file.path);
       int time = watch.elapsedMilliseconds;
 
@@ -47,8 +47,8 @@ void main(List<String> cmdargs) {
 
       if (cmd['json']) {
         var json =
-            new Ast2Json(ranges: cmd['range'], lines: cmd['line']).visit(ast);
-        print(JSON.jsonEncode(json));
+            Ast2Json(ranges: cmd['range'], lines: cmd['line']).visit(ast);
+        print(convert.jsonEncode(json));
       }
     } on ParseError catch (e) {
       stderr.writeln(e);

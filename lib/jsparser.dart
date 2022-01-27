@@ -28,16 +28,16 @@ Program parsejs(String text,
     bool handleNoise = true,
     bool annotations = true,
     bool parseAsExpression = false}) {
-  Offsets offset = new Offsets(0, text.length, firstLine);
+  Offsets offset = Offsets(0, text.length, firstLine);
   if (handleNoise) {
     offset = trimNoise(text, offset);
   }
-  Lexer lexer = new Lexer(text,
+  Lexer lexer = Lexer(text,
       filename: filename,
       currentLine: offset.line,
       index: offset.start,
       endOfFile: offset.end);
-  Parser parser = new Parser(lexer);
+  Parser parser = Parser(lexer);
   Program ast = parseAsExpression
       ? parser.parseExpressionProgram()
       : parser.parseProgram();

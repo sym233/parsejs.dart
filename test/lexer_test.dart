@@ -9,9 +9,9 @@ void main(List<String> args) {
 
   String filename = args[0];
 
-  new File(filename).readAsString().then((String text) {
+  File(filename).readAsString().then((String text) {
     try {
-      Lexer lexer = new Lexer(text);
+      Lexer lexer = Lexer(text);
       for (Token token = lexer.scan();
           token.type != Token.EOF;
           token = lexer.scan()) {

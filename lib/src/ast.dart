@@ -50,7 +50,7 @@ abstract class Node {
   }
 
   /// Visits the immediate children of this node.
-  void forEach(void callback(Node node));
+  void forEach(void Function(Node node) callback);
 
   /// Calls the relevant `visit` method on the visitor.
   T? visitBy<T>(Visitor<T> visitor);
@@ -75,30 +75,41 @@ class Programs extends Node {
 
   Programs(this.programs);
 
+  @override
   void forEach(callback) => programs.forEach(callback);
 
+  @override
   String toString() => 'Programs';
 
-  visitBy<T>(Visitor<T> v) => v.visitPrograms(this);
-  visitBy1<T, A>(Visitor1<T, A> v, A arg) => v.visitPrograms(this, arg);
+  @override
+  visitBy<T>(Visitor<T> visitor) => visitor.visitPrograms(this);
+  @override
+  visitBy1<T, A>(Visitor1<T, A> visitor, A arg) =>
+      visitor.visitPrograms(this, arg);
 }
 
 /// The root node of a JavaScript AST, representing the top-level scope.
 class Program extends Scope {
   /// Indicates where the program was parsed from.
   /// In principle, this can be anything, it is just a string passed to the parser for convenience.
+  @override
   String? filename;
 
   List<Statement> body;
 
   Program(this.body);
 
+  @override
   void forEach(callback) => body.forEach(callback);
 
+  @override
   String toString() => 'Program';
 
-  visitBy<T>(Visitor<T> v) => v.visitProgram(this);
-  visitBy1<T, A>(Visitor1<T, A> v, A arg) => v.visitProgram(this, arg);
+  @override
+  visitBy<T>(Visitor<T> visitor) => visitor.visitProgram(this);
+  @override
+  visitBy1<T, A>(Visitor1<T, A> visitor, A arg) =>
+      visitor.visitProgram(this, arg);
 }
 
 /// A function, which may occur as a function expression, function declaration, or property accessor in an object literal.
@@ -113,16 +124,21 @@ class FunctionNode extends Scope {
   bool get isDeclaration => parent is FunctionDeclaration;
   bool get isAccessor => parent is Property && (parent as Property).isAccessor;
 
+  @override
   forEach(callback) {
     if (name != null) callback(name!);
     params.forEach(callback);
     callback(body);
   }
 
+  @override
   String toString() => 'FunctionNode';
 
-  visitBy<T>(Visitor<T> v) => v.visitFunctionNode(this);
-  visitBy1<T, A>(Visitor1<T, A> v, A arg) => v.visitFunctionNode(this, arg);
+  @override
+  visitBy<T>(Visitor<T> visitor) => visitor.visitFunctionNode(this);
+  @override
+  visitBy1<T, A>(Visitor1<T, A> visitor, A arg) =>
+      visitor.visitFunctionNode(this, arg);
 }
 
 /// Mention of a variable, property, or label.
@@ -157,12 +173,16 @@ class Name extends Node {
 
   Name(this.value);
 
+  @override
   void forEach(callback) {}
 
-  String toString() => '$value';
+  @override
+  String toString() => value;
 
-  visitBy<T>(Visitor<T> v) => v.visitName(this);
-  visitBy1<T, A>(Visitor1<T, A> v, A arg) => v.visitName(this, arg);
+  @override
+  visitBy<T>(Visitor<T> visitor) => visitor.visitName(this);
+  @override
+  visitBy1<T, A>(Visitor1<T, A> visitor, A arg) => visitor.visitName(this, arg);
 }
 
 /// Superclass for all nodes that are statements.
@@ -170,12 +190,17 @@ abstract class Statement extends Node {}
 
 /// Statement of form: `;`
 class EmptyStatement extends Statement {
+  @override
   void forEach(callback) {}
 
+  @override
   String toString() => 'EmptyStatement';
 
-  visitBy<T>(Visitor<T> v) => v.visitEmptyStatement(this);
-  visitBy1<T, A>(Visitor1<T, A> v, A arg) => v.visitEmptyStatement(this, arg);
+  @override
+  visitBy<T>(Visitor<T> visitor) => visitor.visitEmptyStatement(this);
+  @override
+  visitBy1<T, A>(Visitor1<T, A> visitor, A arg) =>
+      visitor.visitEmptyStatement(this, arg);
 }
 
 /// Statement of form: `{ [body] }`
@@ -184,12 +209,17 @@ class BlockStatement extends Statement {
 
   BlockStatement(this.body);
 
+  @override
   void forEach(callback) => body.forEach(callback);
 
+  @override
   String toString() => 'BlockStatement';
 
-  visitBy<T>(Visitor<T> v) => v.visitBlock(this);
-  visitBy1<T, A>(Visitor1<T, A> v, A arg) => v.visitBlock(this, arg);
+  @override
+  visitBy<T>(Visitor<T> visitor) => visitor.visitBlock(this);
+  @override
+  visitBy1<T, A>(Visitor1<T, A> visitor, A arg) =>
+      visitor.visitBlock(this, arg);
 }
 
 /// Statement of form: `[expression];`
@@ -198,13 +228,17 @@ class ExpressionStatement extends Statement {
 
   ExpressionStatement(this.expression);
 
+  @override
   forEach(callback) => callback(expression);
 
+  @override
   String toString() => 'ExpressionStatement';
 
-  visitBy<T>(Visitor<T> v) => v.visitExpressionStatement(this);
-  visitBy1<T, A>(Visitor1<T, A> v, A arg) =>
-      v.visitExpressionStatement(this, arg);
+  @override
+  visitBy<T>(Visitor<T> visitor) => visitor.visitExpressionStatement(this);
+  @override
+  visitBy1<T, A>(Visitor1<T, A> visitor, A arg) =>
+      visitor.visitExpressionStatement(this, arg);
 }
 
 /// Statement of form: `if ([condition]) then [then] else [otherwise]`.
@@ -215,16 +249,20 @@ class IfStatement extends Statement {
 
   IfStatement(this.condition, this.then, [this.otherwise]);
 
+  @override
   forEach(callback) {
     callback(condition);
     callback(then);
     if (otherwise != null) callback(otherwise!);
   }
 
+  @override
   String toString() => 'IfStatement';
 
-  visitBy<T>(Visitor<T> v) => v.visitIf(this);
-  visitBy1<T, A>(Visitor1<T, A> v, A arg) => v.visitIf(this, arg);
+  @override
+  visitBy<T>(Visitor<T> visitor) => visitor.visitIf(this);
+  @override
+  visitBy1<T, A>(Visitor1<T, A> visitor, A arg) => visitor.visitIf(this, arg);
 }
 
 /// Statement of form: `[label]: [body]`
@@ -234,15 +272,20 @@ class LabeledStatement extends Statement {
 
   LabeledStatement(this.label, this.body);
 
+  @override
   forEach(callback) {
     callback(label);
     callback(body);
   }
 
+  @override
   String toString() => 'LabeledStatement';
 
-  visitBy<T>(Visitor<T> v) => v.visitLabeledStatement(this);
-  visitBy1<T, A>(Visitor1<T, A> v, A arg) => v.visitLabeledStatement(this, arg);
+  @override
+  visitBy<T>(Visitor<T> visitor) => visitor.visitLabeledStatement(this);
+  @override
+  visitBy1<T, A>(Visitor1<T, A> visitor, A arg) =>
+      visitor.visitLabeledStatement(this, arg);
 }
 
 /// Statement of form: `break;` or `break [label];`
@@ -251,14 +294,19 @@ class BreakStatement extends Statement {
 
   BreakStatement(this.label);
 
+  @override
   forEach(callback) {
     if (label != null) callback(label!);
   }
 
+  @override
   String toString() => 'BreakStatement';
 
-  visitBy<T>(Visitor<T> v) => v.visitBreak(this);
-  visitBy1<T, A>(Visitor1<T, A> v, A arg) => v.visitBreak(this, arg);
+  @override
+  visitBy<T>(Visitor<T> visitor) => visitor.visitBreak(this);
+  @override
+  visitBy1<T, A>(Visitor1<T, A> visitor, A arg) =>
+      visitor.visitBreak(this, arg);
 }
 
 /// Statement of form: `continue;` or `continue [label];`
@@ -267,14 +315,19 @@ class ContinueStatement extends Statement {
 
   ContinueStatement(this.label);
 
+  @override
   forEach(callback) {
     if (label != null) callback(label!);
   }
 
+  @override
   String toString() => 'ContinueStatement';
 
-  visitBy<T>(Visitor<T> v) => v.visitContinue(this);
-  visitBy1<T, A>(Visitor1<T, A> v, A arg) => v.visitContinue(this, arg);
+  @override
+  visitBy<T>(Visitor<T> visitor) => visitor.visitContinue(this);
+  @override
+  visitBy1<T, A>(Visitor1<T, A> visitor, A arg) =>
+      visitor.visitContinue(this, arg);
 }
 
 /// Statement of form: `with ([object]) { [body] }`
@@ -284,15 +337,19 @@ class WithStatement extends Statement {
 
   WithStatement(this.object, this.body);
 
+  @override
   forEach(callback) {
     callback(object);
     callback(body);
   }
 
+  @override
   String toString() => 'WithStatement';
 
-  visitBy<T>(Visitor<T> v) => v.visitWith(this);
-  visitBy1<T, A>(Visitor1<T, A> v, A arg) => v.visitWith(this, arg);
+  @override
+  visitBy<T>(Visitor<T> visitor) => visitor.visitWith(this);
+  @override
+  visitBy1<T, A>(Visitor1<T, A> visitor, A arg) => visitor.visitWith(this, arg);
 }
 
 /// Statement of form: `switch ([argument]) { [cases] }`
@@ -302,15 +359,20 @@ class SwitchStatement extends Statement {
 
   SwitchStatement(this.argument, this.cases);
 
+  @override
   forEach(callback) {
     callback(argument);
     cases.forEach(callback);
   }
 
+  @override
   String toString() => 'SwitchStatement';
 
-  visitBy<T>(Visitor<T> v) => v.visitSwitch(this);
-  visitBy1<T, A>(Visitor1<T, A> v, A arg) => v.visitSwitch(this, arg);
+  @override
+  visitBy<T>(Visitor<T> visitor) => visitor.visitSwitch(this);
+  @override
+  visitBy1<T, A>(Visitor1<T, A> visitor, A arg) =>
+      visitor.visitSwitch(this, arg);
 }
 
 /// Clause in a switch: `case [expression]: [body]` or `default: [body]` if [expression] is null.
@@ -324,15 +386,20 @@ class SwitchCase extends Node {
   /// True if this is a default clause, and not a case clause.
   bool get isDefault => expression == null;
 
+  @override
   forEach(callback) {
     if (expression != null) callback(expression!);
     body.forEach(callback);
   }
 
+  @override
   String toString() => 'SwitchCase';
 
-  visitBy<T>(Visitor<T> v) => v.visitSwitchCase(this);
-  visitBy1<T, A>(Visitor1<T, A> v, A arg) => v.visitSwitchCase(this, arg);
+  @override
+  visitBy<T>(Visitor<T> visitor) => visitor.visitSwitchCase(this);
+  @override
+  visitBy1<T, A>(Visitor1<T, A> visitor, A arg) =>
+      visitor.visitSwitchCase(this, arg);
 }
 
 /// Statement of form: `return [argument];` or `return;`
@@ -341,12 +408,17 @@ class ReturnStatement extends Statement {
 
   ReturnStatement(this.argument);
 
+  @override
   forEach(callback) => argument != null ? callback(argument!) : null;
 
+  @override
   String toString() => 'ReturnStatement';
 
-  visitBy<T>(Visitor<T> v) => v.visitReturn(this);
-  visitBy1<T, A>(Visitor1<T, A> v, A arg) => v.visitReturn(this, arg);
+  @override
+  visitBy<T>(Visitor<T> visitor) => visitor.visitReturn(this);
+  @override
+  visitBy1<T, A>(Visitor1<T, A> visitor, A arg) =>
+      visitor.visitReturn(this, arg);
 }
 
 /// Statement of form: `throw [argument];`
@@ -355,12 +427,17 @@ class ThrowStatement extends Statement {
 
   ThrowStatement(this.argument);
 
+  @override
   forEach(callback) => callback(argument);
 
+  @override
   String toString() => 'ThrowStatement';
 
-  visitBy<T>(Visitor<T> v) => v.visitThrow(this);
-  visitBy1<T, A>(Visitor1<T, A> v, A arg) => v.visitThrow(this, arg);
+  @override
+  visitBy<T>(Visitor<T> visitor) => visitor.visitThrow(this);
+  @override
+  visitBy1<T, A>(Visitor1<T, A> visitor, A arg) =>
+      visitor.visitThrow(this, arg);
 }
 
 /// Statement of form: `try [block] catch [handler] finally [finalizer]`.
@@ -371,16 +448,20 @@ class TryStatement extends Statement {
 
   TryStatement(this.block, this.handler, this.finalizer);
 
+  @override
   forEach(callback) {
     callback(block);
     if (handler != null) callback(handler!);
     if (finalizer != null) callback(finalizer!);
   }
 
+  @override
   String toString() => 'TryStatement';
 
-  visitBy<T>(Visitor<T> v) => v.visitTry(this);
-  visitBy1<T, A>(Visitor1<T, A> v, A arg) => v.visitTry(this, arg);
+  @override
+  visitBy<T>(Visitor<T> visitor) => visitor.visitTry(this);
+  @override
+  visitBy1<T, A>(Visitor1<T, A> visitor, A arg) => visitor.visitTry(this, arg);
 }
 
 /// A catch clause: `catch ([param]) [body]`
@@ -390,15 +471,20 @@ class CatchClause extends Scope {
 
   CatchClause(this.param, this.body);
 
+  @override
   forEach(callback) {
     callback(param);
     callback(body);
   }
 
+  @override
   String toString() => 'CatchClause';
 
-  visitBy<T>(Visitor<T> v) => v.visitCatchClause(this);
-  visitBy1<T, A>(Visitor1<T, A> v, A arg) => v.visitCatchClause(this, arg);
+  @override
+  visitBy<T>(Visitor<T> visitor) => visitor.visitCatchClause(this);
+  @override
+  visitBy1<T, A>(Visitor1<T, A> visitor, A arg) =>
+      visitor.visitCatchClause(this, arg);
 }
 
 /// Statement of form: `while ([condition]) [body]`
@@ -408,15 +494,20 @@ class WhileStatement extends Statement {
 
   WhileStatement(this.condition, this.body);
 
+  @override
   forEach(callback) {
     callback(condition);
     callback(body);
   }
 
+  @override
   String toString() => 'WhileStatement';
 
-  visitBy<T>(Visitor<T> v) => v.visitWhile(this);
-  visitBy1<T, A>(Visitor1<T, A> v, A arg) => v.visitWhile(this, arg);
+  @override
+  visitBy<T>(Visitor<T> visitor) => visitor.visitWhile(this);
+  @override
+  visitBy1<T, A>(Visitor1<T, A> visitor, A arg) =>
+      visitor.visitWhile(this, arg);
 }
 
 /// Statement of form: `do [body] while ([condition]);`
@@ -426,15 +517,20 @@ class DoWhileStatement extends Statement {
 
   DoWhileStatement(this.body, this.condition);
 
+  @override
   forEach(callback) {
     callback(body);
     callback(condition);
   }
 
+  @override
   String toString() => 'DoWhileStatement';
 
-  visitBy<T>(Visitor<T> v) => v.visitDoWhile(this);
-  visitBy1<T, A>(Visitor1<T, A> v, A arg) => v.visitDoWhile(this, arg);
+  @override
+  visitBy<T>(Visitor<T> visitor) => visitor.visitDoWhile(this);
+  @override
+  visitBy1<T, A>(Visitor1<T, A> visitor, A arg) =>
+      visitor.visitDoWhile(this, arg);
 }
 
 /// Statement of form: `for ([init]; [condition]; [update]) [body]`
@@ -447,6 +543,7 @@ class ForStatement extends Statement {
 
   ForStatement(this.init, this.condition, this.update, this.body);
 
+  @override
   forEach(callback) {
     if (init != null) callback(init!);
     if (condition != null) callback(condition!);
@@ -454,10 +551,13 @@ class ForStatement extends Statement {
     callback(body);
   }
 
+  @override
   String toString() => 'ForStatement';
 
-  visitBy<T>(Visitor<T> v) => v.visitFor(this);
-  visitBy1<T, A>(Visitor1<T, A> v, A arg) => v.visitFor(this, arg);
+  @override
+  visitBy<T>(Visitor<T> visitor) => visitor.visitFor(this);
+  @override
+  visitBy1<T, A>(Visitor1<T, A> visitor, A arg) => visitor.visitFor(this, arg);
 }
 
 /// Statement of form: `for ([left] in [right]) [body]`
@@ -469,16 +569,21 @@ class ForInStatement extends Statement {
 
   ForInStatement(this.left, this.right, this.body);
 
+  @override
   forEach(callback) {
     callback(left);
     callback(right);
     callback(body);
   }
 
+  @override
   String toString() => 'ForInStatement';
 
-  visitBy<T>(Visitor<T> v) => v.visitForIn(this);
-  visitBy1<T, A>(Visitor1<T, A> v, A arg) => v.visitForIn(this, arg);
+  @override
+  visitBy<T>(Visitor<T> visitor) => visitor.visitForIn(this);
+  @override
+  visitBy1<T, A>(Visitor1<T, A> visitor, A arg) =>
+      visitor.visitForIn(this, arg);
 }
 
 /// Statement of form: `function [function.name])([function.params]) { [function.body] }`.
@@ -489,13 +594,17 @@ class FunctionDeclaration extends Statement {
 
   FunctionDeclaration(this.function) : name = function.name!;
 
+  @override
   forEach(callback) => callback(function);
 
+  @override
   String toString() => 'FunctionDeclaration';
 
-  visitBy<T>(Visitor<T> v) => v.visitFunctionDeclaration(this);
-  visitBy1<T, A>(Visitor1<T, A> v, A arg) =>
-      v.visitFunctionDeclaration(this, arg);
+  @override
+  visitBy<T>(Visitor<T> visitor) => visitor.visitFunctionDeclaration(this);
+  @override
+  visitBy1<T, A>(Visitor1<T, A> visitor, A arg) =>
+      visitor.visitFunctionDeclaration(this, arg);
 }
 
 /// Statement of form: `var [declarations];`
@@ -504,13 +613,17 @@ class VariableDeclaration extends Statement {
 
   VariableDeclaration(this.declarations);
 
+  @override
   forEach(callback) => declarations.forEach(callback);
 
+  @override
   String toString() => 'VariableDeclaration';
 
-  visitBy<T>(Visitor<T> v) => v.visitVariableDeclaration(this);
-  visitBy1<T, A>(Visitor1<T, A> v, A arg) =>
-      v.visitVariableDeclaration(this, arg);
+  @override
+  visitBy<T>(Visitor<T> visitor) => visitor.visitVariableDeclaration(this);
+  @override
+  visitBy1<T, A>(Visitor1<T, A> visitor, A arg) =>
+      visitor.visitVariableDeclaration(this, arg);
 }
 
 /// Variable declaration: `[name]` or `[name] = [init]`.
@@ -520,26 +633,35 @@ class VariableDeclarator extends Node {
 
   VariableDeclarator(this.name, this.init);
 
+  @override
   forEach(callback) {
     callback(name);
     if (init != null) callback(init!);
   }
 
+  @override
   String toString() => 'VariableDeclarator';
 
-  visitBy<T>(Visitor<T> v) => v.visitVariableDeclarator(this);
-  visitBy1<T, A>(Visitor1<T, A> v, A arg) =>
-      v.visitVariableDeclarator(this, arg);
+  @override
+  visitBy<T>(Visitor<T> visitor) => visitor.visitVariableDeclarator(this);
+  @override
+  visitBy1<T, A>(Visitor1<T, A> visitor, A arg) =>
+      visitor.visitVariableDeclarator(this, arg);
 }
 
 /// Statement of form: `debugger;`
 class DebuggerStatement extends Statement {
+  @override
   forEach(callback) {}
 
+  @override
   String toString() => 'DebuggerStatement';
 
-  visitBy<T>(Visitor<T> v) => v.visitDebugger(this);
-  visitBy1<T, A>(Visitor1<T, A> v, A arg) => v.visitDebugger(this, arg);
+  @override
+  visitBy<T>(Visitor<T> visitor) => visitor.visitDebugger(this);
+  @override
+  visitBy1<T, A>(Visitor1<T, A> visitor, A arg) =>
+      visitor.visitDebugger(this, arg);
 }
 
 ///////
@@ -549,12 +671,16 @@ abstract class Expression extends Node {}
 
 /// Expression of form: `this`
 class ThisExpression extends Expression {
+  @override
   forEach(callback) {}
 
+  @override
   String toString() => 'ThisExpression';
 
-  visitBy<T>(Visitor<T> v) => v.visitThis(this);
-  visitBy1<T, A>(Visitor1<T, A> v, A arg) => v.visitThis(this, arg);
+  @override
+  visitBy<T>(Visitor<T> visitor) => visitor.visitThis(this);
+  @override
+  visitBy1<T, A>(Visitor1<T, A> visitor, A arg) => visitor.visitThis(this, arg);
 }
 
 /// Expression of form: `[ [expressions] ]`
@@ -564,6 +690,7 @@ class ArrayExpression extends Expression {
 
   ArrayExpression(this.expressions);
 
+  @override
   forEach(callback) {
     for (final Expression? exp in expressions) {
       if (exp != null) {
@@ -572,10 +699,14 @@ class ArrayExpression extends Expression {
     }
   }
 
+  @override
   String toString() => 'ArrayExpression';
 
-  visitBy<T>(Visitor<T> v) => v.visitArray(this);
-  visitBy1<T, A>(Visitor1<T, A> v, A arg) => v.visitArray(this, arg);
+  @override
+  visitBy<T>(Visitor<T> visitor) => visitor.visitArray(this);
+  @override
+  visitBy1<T, A>(Visitor1<T, A> visitor, A arg) =>
+      visitor.visitArray(this, arg);
 }
 
 /// Expression of form: `{ [properties] }`
@@ -584,12 +715,17 @@ class ObjectExpression extends Expression {
 
   ObjectExpression(this.properties);
 
+  @override
   forEach(callback) => properties.forEach(callback);
 
+  @override
   String toString() => 'ObjectExpression';
 
-  visitBy<T>(Visitor<T> v) => v.visitObject(this);
-  visitBy1<T, A>(Visitor1<T, A> v, A arg) => v.visitObject(this, arg);
+  @override
+  visitBy<T>(Visitor<T> visitor) => visitor.visitObject(this);
+  @override
+  visitBy1<T, A>(Visitor1<T, A> visitor, A arg) =>
+      visitor.visitObject(this, arg);
 }
 
 /// Property initializer `[key]: [value]`, or getter `get [key] [value]`, or setter `set [key] [value]`.
@@ -624,15 +760,20 @@ class Property extends Node {
   /// Returns the value as an Expression. Useful for non-getter/setters.
   Expression get expression => value as Expression;
 
+  @override
   forEach(callback) {
     callback(key);
     callback(value);
   }
 
+  @override
   String toString() => 'Property';
 
-  visitBy<T>(Visitor<T> v) => v.visitProperty(this);
-  visitBy1<T, A>(Visitor1<T, A> v, A arg) => v.visitProperty(this, arg);
+  @override
+  visitBy<T>(Visitor<T> visitor) => visitor.visitProperty(this);
+  @override
+  visitBy1<T, A>(Visitor1<T, A> visitor, A arg) =>
+      visitor.visitProperty(this, arg);
 }
 
 /// Expression of form: `function [function.name]([function.params]) { [function.body] }`.
@@ -641,13 +782,17 @@ class FunctionExpression extends Expression {
 
   FunctionExpression(this.function);
 
+  @override
   forEach(callback) => callback(function);
 
+  @override
   String toString() => 'FunctionExpression';
 
-  visitBy<T>(Visitor<T> v) => v.visitFunctionExpression(this);
-  visitBy1<T, A>(Visitor1<T, A> v, A arg) =>
-      v.visitFunctionExpression(this, arg);
+  @override
+  visitBy<T>(Visitor<T> visitor) => visitor.visitFunctionExpression(this);
+  @override
+  visitBy1<T, A>(Visitor1<T, A> visitor, A arg) =>
+      visitor.visitFunctionExpression(this, arg);
 }
 
 /// Comma-seperated expressions.
@@ -656,12 +801,17 @@ class SequenceExpression extends Expression {
 
   SequenceExpression(this.expressions);
 
+  @override
   forEach(callback) => expressions.forEach(callback);
 
+  @override
   String toString() => 'SequenceExpression';
 
-  visitBy<T>(Visitor<T> v) => v.visitSequence(this);
-  visitBy1<T, A>(Visitor1<T, A> v, A arg) => v.visitSequence(this, arg);
+  @override
+  visitBy<T>(Visitor<T> visitor) => visitor.visitSequence(this);
+  @override
+  visitBy1<T, A>(Visitor1<T, A> visitor, A arg) =>
+      visitor.visitSequence(this, arg);
 }
 
 /// Expression of form: `+[argument]`, or using any of the unary operators:
@@ -672,12 +822,17 @@ class UnaryExpression extends Expression {
 
   UnaryExpression(this.operator, this.argument);
 
+  @override
   forEach(callback) => callback(argument);
 
+  @override
   String toString() => 'UnaryExpression';
 
-  visitBy<T>(Visitor<T> v) => v.visitUnary(this);
-  visitBy1<T, A>(Visitor1<T, A> v, A arg) => v.visitUnary(this, arg);
+  @override
+  visitBy<T>(Visitor<T> visitor) => visitor.visitUnary(this);
+  @override
+  visitBy1<T, A>(Visitor1<T, A> visitor, A arg) =>
+      visitor.visitUnary(this, arg);
 }
 
 /// Expression of form: `[left] + [right]`, or using any of the binary operators:
@@ -690,15 +845,20 @@ class BinaryExpression extends Expression {
 
   BinaryExpression(this.left, this.operator, this.right);
 
+  @override
   forEach(callback) {
     callback(left);
     callback(right);
   }
 
+  @override
   String toString() => 'BinaryExpression';
 
-  visitBy<T>(Visitor<T> v) => v.visitBinary(this);
-  visitBy1<T, A>(Visitor1<T, A> v, A arg) => v.visitBinary(this, arg);
+  @override
+  visitBy<T>(Visitor<T> visitor) => visitor.visitBinary(this);
+  @override
+  visitBy1<T, A>(Visitor1<T, A> visitor, A arg) =>
+      visitor.visitBinary(this, arg);
 }
 
 /// Expression of form: `[left] = [right]` or `[left] += [right]` or using any of the assignment operators:
@@ -712,15 +872,20 @@ class AssignmentExpression extends Expression {
 
   bool get isCompound => operator.length > 1;
 
+  @override
   forEach(callback) {
     callback(left);
     callback(right);
   }
 
+  @override
   String toString() => 'AssignmentExpression';
 
-  visitBy<T>(Visitor<T> v) => v.visitAssignment(this);
-  visitBy1<T, A>(Visitor1<T, A> v, A arg) => v.visitAssignment(this, arg);
+  @override
+  visitBy<T>(Visitor<T> visitor) => visitor.visitAssignment(this);
+  @override
+  visitBy1<T, A>(Visitor1<T, A> visitor, A arg) =>
+      visitor.visitAssignment(this, arg);
 }
 
 /// Expression of form: `++[argument]`, `--[argument]`, `[argument]++`, `[argument]--`.
@@ -733,12 +898,17 @@ class UpdateExpression extends Expression {
   UpdateExpression.prefix(this.operator, this.argument) : isPrefix = true;
   UpdateExpression.postfix(this.operator, this.argument) : isPrefix = false;
 
+  @override
   forEach(callback) => callback(argument);
 
+  @override
   String toString() => 'UpdateExpression';
 
-  visitBy<T>(Visitor<T> v) => v.visitUpdateExpression(this);
-  visitBy1<T, A>(Visitor1<T, A> v, A arg) => v.visitUpdateExpression(this, arg);
+  @override
+  visitBy<T>(Visitor<T> visitor) => visitor.visitUpdateExpression(this);
+  @override
+  visitBy1<T, A>(Visitor1<T, A> visitor, A arg) =>
+      visitor.visitUpdateExpression(this, arg);
 }
 
 /// Expression of form: `[condition] ? [then] : [otherwise]`.
@@ -749,16 +919,21 @@ class ConditionalExpression extends Expression {
 
   ConditionalExpression(this.condition, this.then, this.otherwise);
 
+  @override
   forEach(callback) {
     callback(condition);
     callback(then);
     callback(otherwise);
   }
 
+  @override
   String toString() => 'ConditionalExpression';
 
-  visitBy<T>(Visitor<T> v) => v.visitConditional(this);
-  visitBy1<T, A>(Visitor1<T, A> v, A arg) => v.visitConditional(this, arg);
+  @override
+  visitBy<T>(Visitor<T> visitor) => visitor.visitConditional(this);
+  @override
+  visitBy1<T, A>(Visitor1<T, A> visitor, A arg) =>
+      visitor.visitConditional(this, arg);
 }
 
 /// Expression of form: `[callee](..[arguments]..)` or `new [callee](..[arguments]..)`.
@@ -770,15 +945,19 @@ class CallExpression extends Expression {
   CallExpression(this.callee, this.arguments, {this.isNew = false});
   CallExpression.newCall(this.callee, this.arguments) : isNew = true;
 
+  @override
   forEach(callback) {
     callback(callee);
     arguments.forEach(callback);
   }
 
+  @override
   String toString() => 'CallExpression';
 
-  visitBy<T>(Visitor<T> v) => v.visitCall(this);
-  visitBy1<T, A>(Visitor1<T, A> v, A arg) => v.visitCall(this, arg);
+  @override
+  visitBy<T>(Visitor<T> visitor) => visitor.visitCall(this);
+  @override
+  visitBy1<T, A>(Visitor1<T, A> visitor, A arg) => visitor.visitCall(this, arg);
 }
 
 /// Expression of form: `[object].[property].`
@@ -788,15 +967,20 @@ class MemberExpression extends Expression {
 
   MemberExpression(this.object, this.property);
 
+  @override
   forEach(callback) {
     callback(object);
     callback(property);
   }
 
+  @override
   String toString() => 'MemberExpression';
 
-  visitBy<T>(Visitor<T> v) => v.visitMember(this);
-  visitBy1<T, A>(Visitor1<T, A> v, A arg) => v.visitMember(this, arg);
+  @override
+  visitBy<T>(Visitor<T> visitor) => visitor.visitMember(this);
+  @override
+  visitBy1<T, A>(Visitor1<T, A> visitor, A arg) =>
+      visitor.visitMember(this, arg);
 }
 
 /// Expression of form: `[object][[property]]`.
@@ -806,15 +990,20 @@ class IndexExpression extends Expression {
 
   IndexExpression(this.object, this.property);
 
+  @override
   forEach(callback) {
     callback(object);
     callback(property);
   }
 
+  @override
   String toString() => 'IndexExpression';
 
-  visitBy<T>(Visitor<T> v) => v.visitIndex(this);
-  visitBy1<T, A>(Visitor1<T, A> v, A arg) => v.visitIndex(this, arg);
+  @override
+  visitBy<T>(Visitor<T> visitor) => visitor.visitIndex(this);
+  @override
+  visitBy1<T, A>(Visitor1<T, A> visitor, A arg) =>
+      visitor.visitIndex(this, arg);
 }
 
 /// A [Name] that is used as an expression.
@@ -825,12 +1014,17 @@ class NameExpression extends Expression {
 
   NameExpression(this.name);
 
+  @override
   forEach(callback) => callback(name);
 
+  @override
   String toString() => 'NameExpression';
 
-  visitBy<T>(Visitor<T> v) => v.visitNameExpression(this);
-  visitBy1<T, A>(Visitor1<T, A> v, A arg) => v.visitNameExpression(this, arg);
+  @override
+  visitBy<T>(Visitor<T> visitor) => visitor.visitNameExpression(this);
+  @override
+  visitBy1<T, A>(Visitor1<T, A> visitor, A arg) =>
+      visitor.visitNameExpression(this, arg);
 }
 
 /// A literal string, number, boolean or null.
@@ -857,12 +1051,17 @@ class LiteralExpression extends Expression {
   /// Converts the value to a string
   String get toName => value.toString();
 
+  @override
   forEach(callback) {}
 
+  @override
   String toString() => 'LiteralExpression';
 
-  visitBy<T>(Visitor<T> v) => v.visitLiteral(this);
-  visitBy1<T, A>(Visitor1<T, A> v, A arg) => v.visitLiteral(this, arg);
+  @override
+  visitBy<T>(Visitor<T> visitor) => visitor.visitLiteral(this);
+  @override
+  visitBy1<T, A>(Visitor1<T, A> visitor, A arg) =>
+      visitor.visitLiteral(this, arg);
 }
 
 /// A regular expression literal.
@@ -872,10 +1071,15 @@ class RegexpExpression extends Expression {
 
   RegexpExpression(this.regexp);
 
+  @override
   forEach(callback) {}
 
+  @override
   String toString() => 'RegexpExpression';
 
-  visitBy<T>(Visitor<T> v) => v.visitRegexp(this);
-  visitBy1<T, A>(Visitor1<T, A> v, A arg) => v.visitRegexp(this, arg);
+  @override
+  visitBy<T>(Visitor<T> visitor) => visitor.visitRegexp(this);
+  @override
+  visitBy1<T, A>(Visitor1<T, A> visitor, A arg) =>
+      visitor.visitRegexp(this, arg);
 }

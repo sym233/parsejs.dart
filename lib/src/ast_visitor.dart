@@ -61,52 +61,96 @@ abstract class Visitor<T> {
 abstract class BaseVisitor<T> implements Visitor<T> {
   T? defaultNode(Node node);
 
+  @override
   T? visit(Node node) => node.visitBy(this);
 
+  @override
   T? visitPrograms(Programs node) => defaultNode(node);
+  @override
   T? visitProgram(Program node) => defaultNode(node);
+  @override
   T? visitFunctionNode(FunctionNode node) => defaultNode(node);
+  @override
   T? visitName(Name node) => defaultNode(node);
 
+  @override
   T? visitEmptyStatement(EmptyStatement node) => defaultNode(node);
+  @override
   T? visitBlock(BlockStatement node) => defaultNode(node);
+  @override
   T? visitExpressionStatement(ExpressionStatement node) => defaultNode(node);
+  @override
   T? visitIf(IfStatement node) => defaultNode(node);
+  @override
   T? visitLabeledStatement(LabeledStatement node) => defaultNode(node);
+  @override
   T? visitBreak(BreakStatement node) => defaultNode(node);
+  @override
   T? visitContinue(ContinueStatement node) => defaultNode(node);
+  @override
   T? visitWith(WithStatement node) => defaultNode(node);
+  @override
   T? visitSwitch(SwitchStatement node) => defaultNode(node);
+  @override
   T? visitSwitchCase(SwitchCase node) => defaultNode(node);
+  @override
   T? visitReturn(ReturnStatement node) => defaultNode(node);
+  @override
   T? visitThrow(ThrowStatement node) => defaultNode(node);
+  @override
   T? visitTry(TryStatement node) => defaultNode(node);
+  @override
   T? visitCatchClause(CatchClause node) => defaultNode(node);
+  @override
   T? visitWhile(WhileStatement node) => defaultNode(node);
+  @override
   T? visitDoWhile(DoWhileStatement node) => defaultNode(node);
+  @override
   T? visitFor(ForStatement node) => defaultNode(node);
+  @override
   T? visitForIn(ForInStatement node) => defaultNode(node);
+  @override
   T? visitFunctionDeclaration(FunctionDeclaration node) => defaultNode(node);
+  @override
   T? visitVariableDeclaration(VariableDeclaration node) => defaultNode(node);
+  @override
   T? visitVariableDeclarator(VariableDeclarator node) => defaultNode(node);
+  @override
   T? visitDebugger(DebuggerStatement node) => defaultNode(node);
 
+  @override
   T? visitThis(ThisExpression node) => defaultNode(node);
+  @override
   T? visitArray(ArrayExpression node) => defaultNode(node);
+  @override
   T? visitObject(ObjectExpression node) => defaultNode(node);
+  @override
   T? visitProperty(Property node) => defaultNode(node);
+  @override
   T? visitFunctionExpression(FunctionExpression node) => defaultNode(node);
+  @override
   T? visitSequence(SequenceExpression node) => defaultNode(node);
+  @override
   T? visitUnary(UnaryExpression node) => defaultNode(node);
+  @override
   T? visitBinary(BinaryExpression node) => defaultNode(node);
+  @override
   T? visitAssignment(AssignmentExpression node) => defaultNode(node);
+  @override
   T? visitUpdateExpression(UpdateExpression node) => defaultNode(node);
+  @override
   T? visitConditional(ConditionalExpression node) => defaultNode(node);
+  @override
   T? visitCall(CallExpression node) => defaultNode(node);
+  @override
   T? visitMember(MemberExpression node) => defaultNode(node);
+  @override
   T? visitIndex(IndexExpression node) => defaultNode(node);
+  @override
   T? visitNameExpression(NameExpression node) => defaultNode(node);
+  @override
   T? visitLiteral(LiteralExpression node) => defaultNode(node);
+  @override
   T? visitRegexp(RegexpExpression node) => defaultNode(node);
 }
 
@@ -125,6 +169,7 @@ abstract class BaseVisitor<T> implements Visitor<T> {
 /// Without the call to `forEach`, a while loop nested in another while loop would
 /// not be found.
 class RecursiveVisitor<T> extends BaseVisitor<T> {
+  @override
   defaultNode(Node node) {
     node.forEach(visit);
   }
@@ -195,60 +240,104 @@ abstract class Visitor1<T, A> {
 class BaseVisitor1<T, A> implements Visitor1<T, A> {
   T? defaultNode(Node node, A arg) => null;
 
+  @override
   T? visit(Node node, A arg) => node.visitBy1(this, arg);
 
+  @override
   T? visitPrograms(Programs node, A arg) => defaultNode(node, arg);
+  @override
   T? visitProgram(Program node, A arg) => defaultNode(node, arg);
+  @override
   T? visitFunctionNode(FunctionNode node, A arg) => defaultNode(node, arg);
+  @override
   T? visitName(Name node, A arg) => defaultNode(node, arg);
 
+  @override
   T? visitEmptyStatement(EmptyStatement node, A arg) => defaultNode(node, arg);
+  @override
   T? visitBlock(BlockStatement node, A arg) => defaultNode(node, arg);
+  @override
   T? visitExpressionStatement(ExpressionStatement node, A arg) =>
       defaultNode(node, arg);
+  @override
   T? visitIf(IfStatement node, A arg) => defaultNode(node, arg);
+  @override
   T? visitLabeledStatement(LabeledStatement node, A arg) =>
       defaultNode(node, arg);
+  @override
   T? visitBreak(BreakStatement node, A arg) => defaultNode(node, arg);
+  @override
   T? visitContinue(ContinueStatement node, A arg) => defaultNode(node, arg);
+  @override
   T? visitWith(WithStatement node, A arg) => defaultNode(node, arg);
+  @override
   T? visitSwitch(SwitchStatement node, A arg) => defaultNode(node, arg);
+  @override
   T? visitSwitchCase(SwitchCase node, A arg) => defaultNode(node, arg);
+  @override
   T? visitReturn(ReturnStatement node, A arg) => defaultNode(node, arg);
+  @override
   T? visitThrow(ThrowStatement node, A arg) => defaultNode(node, arg);
+  @override
   T? visitTry(TryStatement node, A arg) => defaultNode(node, arg);
+  @override
   T? visitCatchClause(CatchClause node, A arg) => defaultNode(node, arg);
+  @override
   T? visitWhile(WhileStatement node, A arg) => defaultNode(node, arg);
+  @override
   T? visitDoWhile(DoWhileStatement node, A arg) => defaultNode(node, arg);
+  @override
   T? visitFor(ForStatement node, A arg) => defaultNode(node, arg);
+  @override
   T? visitForIn(ForInStatement node, A arg) => defaultNode(node, arg);
+  @override
   T? visitFunctionDeclaration(FunctionDeclaration node, A arg) =>
       defaultNode(node, arg);
+  @override
   T? visitVariableDeclaration(VariableDeclaration node, A arg) =>
       defaultNode(node, arg);
+  @override
   T? visitVariableDeclarator(VariableDeclarator node, A arg) =>
       defaultNode(node, arg);
+  @override
   T? visitDebugger(DebuggerStatement node, A arg) => defaultNode(node, arg);
 
+  @override
   T? visitThis(ThisExpression node, A arg) => defaultNode(node, arg);
+  @override
   T? visitArray(ArrayExpression node, A arg) => defaultNode(node, arg);
+  @override
   T? visitObject(ObjectExpression node, A arg) => defaultNode(node, arg);
+  @override
   T? visitProperty(Property node, A arg) => defaultNode(node, arg);
+  @override
   T? visitFunctionExpression(FunctionExpression node, A arg) =>
       defaultNode(node, arg);
+  @override
   T? visitSequence(SequenceExpression node, A arg) => defaultNode(node, arg);
+  @override
   T? visitUnary(UnaryExpression node, A arg) => defaultNode(node, arg);
+  @override
   T? visitBinary(BinaryExpression node, A arg) => defaultNode(node, arg);
+  @override
   T? visitAssignment(AssignmentExpression node, A arg) =>
       defaultNode(node, arg);
+  @override
   T? visitUpdateExpression(UpdateExpression node, A arg) =>
       defaultNode(node, arg);
+  @override
   T? visitConditional(ConditionalExpression node, A arg) =>
       defaultNode(node, arg);
+  @override
   T? visitCall(CallExpression node, A arg) => defaultNode(node, arg);
+  @override
   T? visitMember(MemberExpression node, A arg) => defaultNode(node, arg);
+  @override
   T? visitIndex(IndexExpression node, A arg) => defaultNode(node, arg);
+  @override
   T? visitNameExpression(NameExpression node, A arg) => defaultNode(node, arg);
+  @override
   T? visitLiteral(LiteralExpression node, A arg) => defaultNode(node, arg);
+  @override
   T? visitRegexp(RegexpExpression node, A arg) => defaultNode(node, arg);
 }

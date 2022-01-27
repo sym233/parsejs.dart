@@ -4,8 +4,8 @@ import 'ast.dart';
 
 void annotateAST(Program ast) {
   setParentPointers(ast);
-  new EnvironmentBuilder()..build(ast);
-  new Resolver()..resolve(ast);
+  EnvironmentBuilder().build(ast);
+  Resolver().resolve(ast);
 }
 
 void setParentPointers(Node node, [Node? parent]) {
@@ -25,14 +25,16 @@ class EnvironmentBuilder extends RecursiveVisitor<void> {
     currentScope.environment.add(name.value);
   }
 
+  @override
   visitProgram(Program node) {
-    node.environment = new Set<String>();
+    node.environment = {};
     currentScope = node;
     node.forEach(visit);
   }
 
+  @override
   visitFunctionNode(FunctionNode node) {
-    node.environment = new Set<String>();
+    node.environment = {};
     Scope oldScope = currentScope;
     currentScope = node;
     node.environment.add('arguments');
@@ -44,22 +46,26 @@ class EnvironmentBuilder extends RecursiveVisitor<void> {
     currentScope = oldScope;
   }
 
+  @override
   visitFunctionDeclaration(FunctionDeclaration node) {
     addVar(node.name);
     visit(node.function);
   }
 
+  @override
   visitFunctionExpression(FunctionExpression node) {
     visit(node.function);
   }
 
+  @override
   visitVariableDeclarator(VariableDeclarator node) {
     addVar(node.name);
     node.forEach(visit);
   }
 
+  @override
   visitCatchClause(CatchClause node) {
-    node.environment = new Set<String>();
+    node.environment = {};
     node.environment.add(node.param.value);
     node.forEach(visit);
   }
@@ -95,9 +101,10 @@ class Resolver extends RecursiveVisitor<void> {
     return scope;
   }
 
-  visitName(Name name) {
-    if (name.isVariable) {
-      name.scope = findScope(name);
+  @override
+  visitName(Name node) {
+    if (node.isVariable) {
+      node.scope = findScope(node);
     }
   }
 }

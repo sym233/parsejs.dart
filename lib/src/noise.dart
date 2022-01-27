@@ -31,8 +31,9 @@ Offsets trimNoise(String text, Offsets offsets) {
   bool lookback(String str) {
     if (str.length > end) return false;
     for (int i = 0; i < str.length; i++) {
-      if (text.codeUnitAt(end - str.length + i) != str.codeUnitAt(i))
+      if (text.codeUnitAt(end - str.length + i) != str.codeUnitAt(i)) {
         return false;
+      }
     }
     return true;
   }
@@ -98,5 +99,5 @@ Offsets trimNoise(String text, Offsets offsets) {
     end -= ']]>'.length;
   }
 
-  return new Offsets(index, end, currentLine);
+  return Offsets(index, end, currentLine);
 }

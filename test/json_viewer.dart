@@ -16,7 +16,7 @@ main() {
     var input = stdin.readLineSync() ?? '';
     try {
       var program = parseInput(input);
-      print(new Ast2Json().visit(program));
+      print(Ast2Json().visit(program));
     } catch (e) {
       print(e);
     }

@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 library charcode;
 
 const int NULL = 0;
